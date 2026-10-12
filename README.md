@@ -1,6 +1,37 @@
-# 基于脉冲神经网络的 EEG 睡眠分期与动力学分析
+# EEG 与脉冲神经网络：从睡眠分期到听觉事件分类
 
-本仓库搭建一个可复现的 SNN 信号分类项目：从公开 EEG 数据出发，完成预处理、脉冲编码、脉冲神经网络训练、传统基线对比，并分析网络的脉冲活动。
+这是一个面向初学者的实践项目：使用公开 EEG 数据，逐步学习信号预处理、特征/脉冲表示、分类模型训练和结果评估。项目包含两个彼此独立的 Jupyter Notebook，建议先做睡眠分期，再尝试听觉事件分类。
+
+## 从这里开始
+
+### 你会学到什么
+
+- EEG 数据如何读取、滤波和切分为可分析的片段。
+- 如何用传统分类器建立基线，再训练脉冲神经网络（SNN）进行比较。
+- 如何阅读 Accuracy、Macro-F1、混淆矩阵和脉冲活动图，并识别小样本实验的局限。
+
+### 选择一个实验
+
+| Notebook | 适合了解 | 数据与运行成本 |
+| --- | --- | --- |
+| [`01_sleep_edf_snn.ipynb`](notebooks/01_sleep_edf_snn.ipynb) | EEG 频带特征、睡眠阶段分类、SVM/MLP/SNN 比较 | 首次运行会下载 Sleep-EDF 数据；默认使用 2 位受试者，适合作为第一个实验 |
+| [`02_openneuro_auditory_snn.ipynb`](notebooks/02_openneuro_auditory_snn.ipynb) | 保留时间顺序的 EEG、声音事件、时序 SNN 输入 | 需主动开启下载；单个 EEG 文件约 1 GB，建议先完成第一个实验 |
+
+### 第一次运行
+
+需要 Python 3.10 或 3.11，以及可以访问公开数据源的网络连接。建议在仓库根目录打开终端，创建环境、安装依赖，再启动 JupyterLab：
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m pip install -e .
+jupyter lab
+```
+
+在 JupyterLab 中打开 `notebooks/01_sleep_edf_snn.ipynb`，从上到下逐格运行。代码单元依赖前面已运行的单元；若执行顺序混乱，可重启内核后从头运行。第一次下载和预处理需要一些时间与磁盘空间。听觉 Notebook 会先检查下载开关和磁盘空间，不想下载约 1 GB 文件时，不要将 `DOWNLOAD_EEG` 改为 `True`。
+
+这些 Notebook 用于学习和流程演示，不是临床工具。默认数据规模较小，结果不能代表模型对其他受试者或完整数据集的表现；请结合 Notebook 中的评估说明解释分数。
 
 ## 项目范围
 
@@ -82,17 +113,7 @@ flowchart LR
 
 ## 环境准备
 
-建议 Python 3.10 或 3.11。依赖清单见 [`requirements.txt`](requirements.txt)。安装后从仓库根目录启动 Jupyter，并将 `src` 加入导入路径（Notebook 已预留设置单元）：
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-python -m pip install -e .
-jupyter lab
-```
-
-目前仓库处于脚手架阶段；Notebook 中的数据下载和训练单元需要在本地配置依赖后执行。首次运行会下载公开数据，请预留磁盘空间和网络访问。
+建议使用 Python 3.10 或 3.11；完整安装命令见上方[第一次运行](#第一次运行)。Notebook 会将仓库的 `src/` 加入导入路径。运行睡眠实验需要下载 Sleep-EDF；听觉实验只在明确开启下载后获取约 1 GB 的 EEG 文件。两项实验都需要网络访问和足够的本地磁盘空间。
 
 ## 实验约定
 
